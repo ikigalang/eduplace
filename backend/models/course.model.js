@@ -7,6 +7,10 @@ const courseSchema = new Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+    required: true,
+  },
   category: [],
   rating: [
     {
@@ -18,7 +22,16 @@ const courseSchema = new Schema({
       },
     },
   ],
-  documentUrl: [],
+  document: [
+    {
+      documentTitle: {
+        type: String,
+      },
+      documentUrl: {
+        type: String,
+      },
+    },
+  ],
   posterUrl: {
     type: String,
     trim: true,

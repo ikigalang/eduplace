@@ -11,17 +11,19 @@ router.route("/").get((req, res) => {
 // add new course
 router.route("/add").post((req, res) => {
   const title = req.body.title;
+  const description = req.body.description;
   const category = req.body.category;
   const rating = req.body.rating;
-  const documentUrl = req.body.documentUrl;
+  const document = req.body.document;
   const posterUrl = req.body.posterUrl;
   const price = req.body.price;
 
   const newCourse = new Course({
     title,
+    description,
     category,
     rating,
-    documentUrl,
+    document,
     posterUrl,
     price,
   });
@@ -36,9 +38,10 @@ router.route("/add").post((req, res) => {
 router.route("/update/:id").post((req, res) => {
   Course.findById(req.params.id).then((course) => {
     course.title = req.body.title;
+    course.description = req.body.description;
     course.category = req.body.category;
     course.rating = req.body.rating;
-    course.documentUrl = req.body.documentUrl;
+    course.document = req.body.document;
     course.posterUrl = req.body.posterUrl;
     course.price = req.body.price;
 
