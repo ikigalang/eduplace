@@ -8,6 +8,32 @@ router.route("/").get((req, res) => {
     .catch((error) => res.status(400).json("Error: " + error));
 });
 
+// login user
+router.route("/login").post((req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  User.find({
+    email: email,
+    password: password,
+  })
+    .then((user) =>
+      user.length > 0
+        ? res.json({
+            status: true,
+            _id: user[0]._id,
+            isAdmin: user[0].isAdmin,
+            name: user[0].name,
+            email: user[0].email,
+            photoUrl: user[0].photoUrl,
+            coursePurchased: user[0].coursePurchased,
+            courseOwned: user[0].courseOwned,
+            cart: user[0].cart,
+          })
+        : res.json({ status: false })
+    )
+    .catch((error) => res.status(400).json("Error: " + error));
+});
+
 // add new user
 router.route("/add").post((req, res) => {
   const isAdmin = req.body.isAdmin;
@@ -15,9 +41,9 @@ router.route("/add").post((req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const photoUrl = req.body.photoUrl;
-  const balance = req.body.balance;
   const coursePurchased = req.body.coursePurchased;
   const courseOwned = req.body.courseOwned;
+  const cart = req.body.cart;
 
   const newUser = new User({
     isAdmin,
@@ -25,9 +51,9 @@ router.route("/add").post((req, res) => {
     email,
     password,
     photoUrl,
-    balance,
     coursePurchased,
     courseOwned,
+    cart,
   });
 
   newUser
@@ -44,9 +70,9 @@ router.route("/update/:id").post((req, res) => {
     user.email = req.body.email;
     user.password = req.body.password;
     user.photoUrl = req.body.photoUrl;
-    user.balance = req.body.balance;
     user.coursePurchased = req.body.coursePurchased;
     user.courseOwned = req.body.courseOwned;
+    user.cart = req.body.cart;
 
     user
       .save()

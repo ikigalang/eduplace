@@ -32,6 +32,7 @@ const userSchema = new Schema(
     },
     coursePurchased: [],
     courseOwned: [],
+    cart: [],
   },
   {
     timestamps: true,
