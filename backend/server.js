@@ -31,5 +31,5 @@ app.use("/users", usersRouter);
 app.use("/course", courseRouter);
 
 app.listen(port, () => {
-  console.log(`Server is runnning on prot: ${port}`);
+  console.log(`Server is runnning on port: ${port}`);
 });
