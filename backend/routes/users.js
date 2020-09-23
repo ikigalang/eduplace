@@ -68,7 +68,6 @@ router.route("/update/:id").post((req, res) => {
     user.isAdmin = req.body.isAdmin;
     user.name = req.body.name;
     user.email = req.body.email;
-    user.password = req.body.password;
     user.photoUrl = req.body.photoUrl;
     user.coursePurchased = req.body.coursePurchased;
     user.courseOwned = req.body.courseOwned;
