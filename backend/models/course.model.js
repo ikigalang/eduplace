@@ -11,7 +11,16 @@ const courseSchema = new Schema({
     type: String,
     required: true,
   },
-  category: [],
+  category: [
+    {
+      label: {
+        type: String,
+      },
+      value: {
+        type: String,
+      },
+    },
+  ],
   rating: [
     {
       rate: {
