@@ -12,14 +12,12 @@ router.route("/").get((req, res) => {
 router.route("/add").post((req, res) => {
   const courseId = req.body.courseId;
   const accountId = req.body.accountId;
-  const date = req.body.date;
   const price = req.body.price;
   const status = req.body.status;
 
   const newTransaction = new Transactions({
     courseId,
     accountId,
-    date,
     price,
     status,
   });
@@ -35,7 +33,6 @@ router.route("/update/:id").post((req, res) => {
   Transactions.findById(req.params.id).then((transaction) => {
     transaction.courseId = req.body.courseId;
     transaction.accountId = req.body.accountId;
-    transaction.date = req.body.date;
     transaction.price = req.body.price;
     transaction.status = req.body.status;
 
@@ -52,3 +49,5 @@ router.route("/delete/:id").delete((req, res) => {
     .then(() => res.json("Transaction deleted!"))
     .catch((error) => res.status(400).json("Error: " + error));
 });
+
+module.exports = router;
