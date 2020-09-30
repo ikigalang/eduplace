@@ -28,7 +28,6 @@ const userSchema = new Schema(
     photoUrl: {
       type: String,
       trim: true,
-      minlength: 3,
     },
     coursePurchased: [],
     courseOwned: [],

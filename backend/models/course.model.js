@@ -45,7 +45,6 @@ const courseSchema = new Schema(
     posterUrl: {
       type: String,
       trim: true,
-      minlength: 3,
     },
     price: {
       type: Number,
