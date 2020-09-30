@@ -27,7 +27,7 @@ router.route("/add").post((req, res) => {
     .then((data) => {
       res.json({
         _id: data._id,
-        status: "Transaction added!",
+        response: "Transaction added!",
       });
     })
     .catch((error) => res.status(400).json("Error: " + error));
