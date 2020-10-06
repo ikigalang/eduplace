@@ -59,7 +59,4 @@ router.route("/delete/:id").delete((req, res) => {
     .catch((error) => res.status(400).json("Error: " + error));
 });
 
-// upload course document
-router.route("/upload/document").post((req, res) => {});
-
 module.exports = router;
