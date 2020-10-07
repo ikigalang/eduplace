@@ -8,6 +8,13 @@ router.route("/").get((req, res) => {
     .catch((error) => res.status(400).json("Error: " + error));
 });
 
+// get user by id
+router.route("/:id").get((req, res) => {
+  User.findById(req.params.id)
+    .then((users) => res.json(users))
+    .catch((error) => res.status(400).json("Error: " + error));
+});
+
 // login user
 router.route("/login").post((req, res) => {
   const email = req.body.email;
