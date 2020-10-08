@@ -85,7 +85,6 @@ router.route("/upload/document").post((req, res) => {
       .save()
       .then((status) => {
         res.json(status.meta_data);
-        console.log(status.meta_data);
       })
       .catch((error) => res.status(400).json("Error: " + error));
   });
