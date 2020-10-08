@@ -62,6 +62,7 @@ router.route("/delete/:id").delete((req, res) => {
     .catch((error) => res.status(400).json("Error: " + error));
 });
 
+// upload
 const storage = multer.diskStorage({
   destination: "./public/doc",
   filename: function (req, file, callback) {
@@ -76,14 +77,12 @@ const upload = multer({
 
 router.route("/upload/document").post((req, res) => {
   upload(req, res, () => {
-    console.log("Request ---", req.body);
     console.log("Request file ---", req.file);
     const file = new File();
     file.meta_data = req.file;
     file
       .save()
       .then((status) => {
-        // res.json({ message: "uploaded successfully" });
         res.json(status);
       })
       .catch((error) => res.status(400).json("Error: " + error));
