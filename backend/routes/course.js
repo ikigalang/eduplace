@@ -77,6 +77,7 @@ const upload = multer({
 
 router.route("/upload/document").post((req, res) => {
   upload(req, res, () => {
+    console.log("Request ---", req.body);
     console.log(req);
     console.log("Request file ---", req.file);
     const file = new File();
@@ -85,7 +86,6 @@ router.route("/upload/document").post((req, res) => {
       .save()
       .then((status) => {
         res.json(status.meta_data);
-        console.log(status.meta_data);
       })
       .catch((error) => res.status(400).json("Error: " + error));
   });

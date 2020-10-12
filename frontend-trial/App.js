@@ -6,112 +6,52 @@ import {
   TouchableOpacity,
   Button,
   Image,
-  AsyncStorage,
-  FlatList,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
+import axios from "axios";
 
 export default class App extends React.Component {
   state = {
-    image: null,
     file: null,
-    data: null,
   };
-  _pickDocument = async () => {
+
+  pickDocument = async () => {
     let result = await DocumentPicker.getDocumentAsync({});
-    // alert(result.uri);
-    alert("Dokument berhasil dipilih");
+    // alert("Dokument berhasil dipilih");
     this.setState({ file: result });
-
-    // let dataStorage = [
-    //   { documentTitle: result.name, documentUrl: result.uri },
-    //   ...this.state.file,
-    // ];
-    // console.log(dataStorage);
-    // this.setState({ file: dataStorage });
+    // console.log(this.state.file);
   };
+
   uploadDocument = async () => {
-    let formData = new FormData();
-    let uri = this.state.file.uri;
-    let name = this.state.file.name;
-    let size = this.state.file.size;
-    formData.append("myFile", this.state.file);
-
-    fetch("http://10.10.1.79:8020/course/upload/document", {
-      method: "POST",
+    const formData = new FormData();
+    formData.append("myfile", this.state.file);
+    const data = {
+      fieldname: "myfile",
+      originalname: this.state.file.name,
+    };
+    console.log(formData.get("myfile"));
+    console.log("file");
+    const config = {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "content-type": "multipart/form-data",
       },
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("response");
-        console.log(res);
+    };
+    axios
+      .post("http://localhost:8020/course/upload/document", formData, config)
+      .then((response) => {
+        console.log(response);
       })
-      .catch((e) => console.log(e))
-      .done();
-
-    //Check if any file is selected or not
-
-    //If file selected then create FormData
-    // let fileToUpload = this.state.file;
-    // let data = new FormData();
-    // data.append('name', 'Image Upload');
-    // data.append("myfile", fileToUpload);
-    // console.log(data);
-    //Please change file upload URL
-    // let res = await fetch("http://10.10.1.79:8020/course/upload/document", {
-    //   method: "post",
-    //   body: data,
-    //   headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    // });
-    // console.log(res);
-    // let responseJson = await res.json();
-    // if (responseJson.status == 1) {
-    //   alert("Upload Successful");
-    // }
-
-    // fetch(`http://10.10.1.79:8020/course/upload/document`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    //   body: data,
-    // })
-    //   .then((response) => response.json())
-    //   .then((res) => {
-    //     console.log(res);
-    //     alert(res);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     alert(error);
-    //   })
-    //   .done();
-  };
-  _pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-
-    alert(result.uri);
-    console.log(result);
-
-    if (!result.cancelled) {
-      this.setState({ image: result.uri });
-    }
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   render() {
     let { image } = this.state;
     return (
       <View style={styles.container}>
-        <Button title="Select Document" onPress={this._pickDocument} />
+        <Button title="Select Document" onPress={this.pickDocument} />
         <TouchableOpacity
           style={styles.buttonStyle}
           activeOpacity={0.5}
@@ -128,22 +68,6 @@ export default class App extends React.Component {
             />
           )}
         </View>
-        {/* <Text> {this.state.file.uri} </Text> */}
-        {/* <FlatList
-          data={this.state.file}
-          renderItem={({ item }) => {
-            return (
-              <View>
-                <Text>{item.documentTitle}</Text>
-              </View>
-            );
-          }}
-          // refreshing={this.state.isLoading}
-          contentContainerStyle={{ paddingTop: 5 }}
-          onRefresh={this._onRefresh}
-          // onEndReached={this._onLoadMore}
-          // onEndThreshold={300}
-        /> */}
       </View>
     );
   }
