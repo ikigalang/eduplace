@@ -64,13 +64,17 @@ router.route("/delete/:id").delete((req, res) => {
 });
 
 router.route("/upload/document").post((req, res) => {
+  const filename = "IMG-" + Date.now() + req.body.match[0];
   fs.writeFile(
-    "./public/image/IMG-" + "DOC-" + Date.now() + req.body.match[0],
+    "./public/image/" + filename,
     req.body.base64,
     { encoding: "base64" },
     function (err) {
       console.log("File created");
-      res.json("Upload complete");
+      res.json({
+        status: "Upload Success",
+        filename: filename,
+      });
     }
   );
 });

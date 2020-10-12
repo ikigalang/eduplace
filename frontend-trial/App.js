@@ -39,6 +39,22 @@ export default class App extends React.Component {
     });
   };
 
+  pickDocument = async () => {
+    let result = await DocumentPicker.getDocumentAsync({});
+    console.log(result);
+    let document = "";
+    let fileReader = new FileReader();
+    fileReader.readAsDataURL(result.uri);
+    fileReader.onload = function () {
+      document = fileReader.result;
+    };
+    fileReader.onerror = function (error) {
+      console.log("Error: ", error);
+    };
+
+    console.log(document);
+  };
+
   uploadImage = async () => {
     const data = JSON.stringify({
       filename: this.state.filename,
@@ -67,7 +83,7 @@ export default class App extends React.Component {
     let { image } = this.state;
     return (
       <View style={styles.container}>
-        <Button title="Select Document" />
+        <Button title="Select Document" onPress={this.pickDocument} />
         <TouchableOpacity
           style={styles.buttonStyle}
           activeOpacity={0.5}
