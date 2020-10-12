@@ -63,19 +63,6 @@ router.route("/delete/:id").delete((req, res) => {
     .catch((error) => res.status(400).json("Error: " + error));
 });
 
-// upload
-// const storage = multer.diskStorage({
-//   destination: "./public/doc",
-//   filename: function (req, file, callback) {
-//     callback(null, "DOC-" + Date.now() + path.extname(file.originalname));
-//   },
-// });
-
-// const upload = multer({
-// storage: storage,
-// limits: { fileSize: 1000000 },
-// }).single("myfile");
-
 router.route("/upload/document").post((req, res) => {
   fs.writeFile(
     "./public/image/IMG-" + "DOC-" + Date.now() + req.body.match[0],
@@ -86,18 +73,6 @@ router.route("/upload/document").post((req, res) => {
       res.json("Upload complete");
     }
   );
-  // upload(req, res, () => {
-  // console.log("Request ---", req.body);
-  // console.log("Request file ---", req.file);
-  // const file = new File();
-  // file.meta_data = req.file;
-  // file
-  //   .save()
-  //   .then((status) => {
-  //     res.json(status.meta_data);
-  //   })
-  //   .catch((error) => res.status(400).json("Error: " + error));
-  // });
 });
 
 module.exports = router;
