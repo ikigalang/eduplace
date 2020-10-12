@@ -47,13 +47,16 @@ export default class App extends React.Component {
       uri: this.state.file.uri,
       base64: this.state.file.base64,
     });
-    const upload = await fetch("http://10.10.0.67:8020/course/", {
-      method: "post",
-      body: data,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const upload = await fetch(
+      "http://10.10.0.67:8020/course/upload/document",
+      {
+        method: "post",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const result = await upload.json();
     alert(result);
