@@ -13,54 +13,67 @@ import axios from "axios";
 
 export default class App extends React.Component {
   state = {
+    filename: "",
+    type: "",
+    match: [],
     file: null,
   };
 
-  pickDocument = async () => {
-    let result = await DocumentPicker.getDocumentAsync({});
-    // alert("Dokument berhasil dipilih");
-    this.setState({ file: result });
-    // console.log(this.state.file);
+  pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      base64: true,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    let localUri = result.uri;
+    let filename = localUri.split("/").pop();
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+    this.setState({
+      filename: filename,
+      type: type,
+      match: match,
+      file: result,
+    });
   };
 
-  uploadDocument = async () => {
-    const formData = new FormData();
-    formData.append("myfile", this.state.file);
-    const data = {
-      fieldname: "myfile",
-      originalname: this.state.file.name,
-    };
-    console.log(formData.get("myfile"));
-    console.log("file");
-    const config = {
+  uploadImage = async () => {
+    const data = JSON.stringify({
+      filename: this.state.filename,
+      type: this.state.type,
+      match: this.state.match,
+      uri: this.state.file.uri,
+      base64: this.state.file.base64,
+    });
+    const upload = await fetch("http://10.10.0.67:8020/course/", {
+      method: "post",
+      body: data,
       headers: {
-        "content-type": "multipart/form-data",
+        "Content-Type": "application/json",
       },
-    };
-    axios
-      .post("http://localhost:8020/course/upload/document", formData, config)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    });
+
+    const result = await upload.json();
+    alert(result);
+    console.log(result);
   };
 
   render() {
     let { image } = this.state;
     return (
       <View style={styles.container}>
-        <Button title="Select Document" onPress={this.pickDocument} />
+        <Button title="Select Document" />
         <TouchableOpacity
           style={styles.buttonStyle}
           activeOpacity={0.5}
-          onPress={this.uploadDocument}
+          onPress={this.uploadImage}
         >
           <Text style={styles.buttonTextStyle}>Upload File</Text>
         </TouchableOpacity>
         <View style={{ marginTop: 20 }}>
-          <Button title="Select Image" onPress={this._pickImage} />
+          <Button title="Select Image" onPress={this.pickImage} />
           {image && (
             <Image
               source={{ uri: image }}
@@ -94,3 +107,64 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
 });
+
+// import React, { useState, useEffect } from "react";
+// import { Button, Image, View, Platform } from "react-native";
+// import * as ImagePicker from "expo-image-picker";
+// import axios from "axios";
+
+// export default function ImagePickerExample() {
+//   const [image, setImage] = useState(null);
+//   const [base64, setBase64] = useState(null);
+
+//   useEffect(() => {
+//     (async () => {
+//       if (Platform.OS !== "web") {
+//         const {
+//           status,
+//         } = await ImagePicker.requestCameraRollPermissionsAsync();
+//         if (status !== "granted") {
+//           alert("Sorry, we need camera roll permissions to make this work!");
+//         }
+//       }
+//     })();
+//   }, []);
+
+//   const pickImage = async () => {
+//     let result = await ImagePicker.launchImageLibraryAsync({
+//       mediaTypes: ImagePicker.MediaTypeOptions.All,
+//       base64: true,
+//       allowsEditing: true,
+//       aspect: [4, 3],
+//       quality: 1,
+//     });
+
+//     setBase64({ base64: result.base64 });
+//     console.log(base64);
+
+//     if (!result.cancelled) {
+//       setImage(result.uri);
+//     }
+//   };
+
+//   const uploadDocument = async () => {
+//     axios
+//       .get("http://10.10.0.67:8020/course/", JSON.stringify(base64))
+//       .then((response) => {
+//         console.log(response);
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//       });
+//   };
+
+//   return (
+//     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+//       <Button title="Pick an image from camera roll" onPress={pickImage} />
+//       {image && (
+//         <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+//       )}
+//       <Button title="Upload" onPress={uploadDocument} />
+//     </View>
+//   );
+// }
