@@ -64,7 +64,7 @@ router.route("/delete/:id").delete((req, res) => {
 });
 
 // upload image
-router.route("/upload/document").post((req, res) => {
+router.route("/upload/image").post((req, res) => {
   const filename = "IMG-" + Date.now() + req.body.match[0];
   fs.writeFile(
     "./public/image/" + filename,
