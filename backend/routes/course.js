@@ -81,12 +81,23 @@ router.route("/upload/image").post((req, res) => {
 });
 
 // get image
-router.route("/image/:refName").get((req, res) => {
+router.route("/image/:refName").get((req, res, next) => {
+  const options = {
+    dotfiles: "deny",
+    headers: {
+      "x-timestamp": Date.now(),
+      "x-sent": true,
+    },
+  };
   const baseUrl =
     "/home/gp/Documents/Public/magang/eduplace/backend/public/image/";
-  const filepath = baseUrl + req.params.refName;
-  res.sendFile(filepath, (error) => {
-    res.status(400).json("Error: " + error);
+  const fileName = baseUrl + req.params.refName;
+  res.sendFile(fileName, options, function (err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log("Sent:", fileName);
+    }
   });
 });
 
