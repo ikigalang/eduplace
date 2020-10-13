@@ -2,6 +2,7 @@ const router = require("express").Router();
 const path = require("path");
 const multer = require("multer");
 const File = require("../models/file.model");
+const fs = require("fs");
 let Course = require("../models/course.model");
 
 // get all course
@@ -62,32 +63,20 @@ router.route("/delete/:id").delete((req, res) => {
     .catch((error) => res.status(400).json("Error: " + error));
 });
 
-// upload
-const storage = multer.diskStorage({
-  destination: "./public/doc",
-  filename: function (req, file, callback) {
-    callback(null, "DOC-" + Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 1000000 },
-}).single("myfile");
-
 router.route("/upload/document").post((req, res) => {
-  upload(req, res, () => {
-    console.log(req);
-    console.log("Request file ---", req.file);
-    const file = new File();
-    file.meta_data = req.file;
-    file
-      .save()
-      .then((status) => {
-        res.json(status.meta_data);
-      })
-      .catch((error) => res.status(400).json("Error: " + error));
-  });
+  const filename = "IMG-" + Date.now() + req.body.match[0];
+  fs.writeFile(
+    "./public/image/" + filename,
+    req.body.base64,
+    { encoding: "base64" },
+    function (err) {
+      console.log("File created");
+      res.json({
+        status: "Upload Success",
+        filename: filename,
+      });
+    }
+  );
 });
 
 module.exports = router;
