@@ -63,6 +63,7 @@ router.route("/delete/:id").delete((req, res) => {
     .catch((error) => res.status(400).json("Error: " + error));
 });
 
+// upload image
 router.route("/upload/document").post((req, res) => {
   const filename = "IMG-" + Date.now() + req.body.match[0];
   fs.writeFile(
@@ -77,6 +78,16 @@ router.route("/upload/document").post((req, res) => {
       });
     }
   );
+});
+
+// get image
+router.route("/image/:refName").get((req, res) => {
+  const baseUrl =
+    "/home/gp/Documents/Public/magang/eduplace/backend/public/image/";
+  const filepath = baseUrl + req.params.refName;
+  res.sendFile(filepath, (error) => {
+    res.status(400).json("Error: " + error);
+  });
 });
 
 module.exports = router;
