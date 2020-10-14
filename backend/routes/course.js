@@ -90,8 +90,8 @@ router.route("/image/:refName").get((req, res, next) => {
     },
   };
   // perlu disesuaikan
-  const baseUrl =
-    "/home/gp/Documents/Public/magang/eduplace/backend/public/image/";
+  const baseUrl = process.env.DIR + "/image/";
+  console.log(baseUrl);
   const fileName = baseUrl + req.params.refName;
   res.sendFile(fileName, options, function (errror) {
     if (errror) {
@@ -130,8 +130,7 @@ router.route("/document/:refName").get((req, res, next) => {
     },
   };
   // perlu disesuaikan
-  const baseUrl =
-    "/home/gp/Documents/Public/magang/eduplace/backend/public/doc/";
+  const baseUrl = process.env.DIR + "/doc/";
   const fileName = baseUrl + req.params.refName;
   res.sendFile(fileName, options, function (error) {
     if (error) {
