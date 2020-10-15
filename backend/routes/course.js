@@ -90,7 +90,7 @@ router.route("/image/:refName").get((req, res, next) => {
     },
   };
   const baseUrl =
-    "/home/gp/Documents/Public/magang/eduplace/backend/public/image/";
+    "C:/Users/asus/Documents/apps/eduplace/backend/public/image/";
   const fileName = baseUrl + req.params.refName;
   res.sendFile(fileName, options, function (err) {
     if (err) {
