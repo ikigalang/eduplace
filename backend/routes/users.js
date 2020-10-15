@@ -95,4 +95,44 @@ router.route("/delete/:id").delete((req, res) => {
     .catch((error) => res.status(400).json("Error: " + error));
 });
 
+// upload image
+router.route("/upload/image").post((req, res) => {
+  const filename = "IMG-" + Date.now() + req.body.match[0];
+  fs.writeFile(
+    "./public/image/" + filename,
+    req.body.base64,
+    { encoding: "base64" },
+    function (err) {
+      console.log("File created");
+      res.json({
+        status: "Upload Success",
+        filename: filename,
+      });
+    }
+  );
+});
+
+// get image
+router.route("/image/:refName").get((req, res, next) => {
+  const options = {
+    dotfiles: "deny",
+    headers: {
+      "x-timestamp": Date.now(),
+      "x-sent": true,
+    },
+  };
+  // perlu disesuaikan
+  const baseUrl = process.env.DIR + "/image/";
+  console.log(baseUrl);
+  const fileName = baseUrl + req.params.refName;
+  res.sendFile(fileName, options, function (errror) {
+    if (errror) {
+      next(errror);
+      res.status(400).json("Error: " + error);
+    } else {
+      console.log("Sent:", fileName);
+    }
+  });
+});
+
 module.exports = router;

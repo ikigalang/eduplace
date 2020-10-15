@@ -89,12 +89,55 @@ router.route("/image/:refName").get((req, res, next) => {
       "x-sent": true,
     },
   };
-  const baseUrl =
-    "C:/Users/asus/Documents/apps/eduplace/backend/public/image/";
+
+  // perlu disesuaikan
+  const baseUrl = process.env.DIR + "/image/";
+  console.log(baseUrl);
+
   const fileName = baseUrl + req.params.refName;
-  res.sendFile(fileName, options, function (err) {
-    if (err) {
-      next(err);
+  res.sendFile(fileName, options, function (errror) {
+    if (errror) {
+      next(errror);
+      res.status(400).json("Error: " + error);
+    } else {
+      console.log("Sent:", fileName);
+    }
+  });
+});
+
+// upload document
+router.route("/upload/document").post((req, res) => {
+  const filename = "DOC-" + Date.now() + req.body.match[0];
+  fs.writeFile(
+    "./public/doc/" + filename,
+    req.body.base64,
+    { encoding: "base64" },
+    function (err) {
+      console.log("File created");
+      res.json({
+        status: "Upload Success",
+        filename: filename,
+      });
+    }
+  );
+});
+
+// get document
+router.route("/document/:refName").get((req, res, next) => {
+  const options = {
+    dotfiles: "deny",
+    headers: {
+      "x-timestamp": Date.now(),
+      "x-sent": true,
+    },
+  };
+  // perlu disesuaikan
+  const baseUrl = process.env.DIR + "/doc/";
+  const fileName = baseUrl + req.params.refName;
+  res.sendFile(fileName, options, function (error) {
+    if (error) {
+      next(error);
+      res.status(400).json("Error: " + error);
     } else {
       console.log("Sent:", fileName);
     }
