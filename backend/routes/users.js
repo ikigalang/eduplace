@@ -125,9 +125,9 @@ router.route("/image/:refName").get((req, res, next) => {
   const baseUrl = process.env.DIR + "/image/";
   console.log(baseUrl);
   const fileName = baseUrl + req.params.refName;
-  res.sendFile(fileName, options, function (errror) {
-    if (errror) {
-      next(errror);
+  res.sendFile(fileName, options, function (error) {
+    if (error) {
+      next(error);
       res.status(400).json("Error: " + error);
     } else {
       console.log("Sent:", fileName);

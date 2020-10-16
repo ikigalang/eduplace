@@ -45,7 +45,7 @@ router.route("/update/:id").post((req, res) => {
     course.description = req.body.description;
     course.category = req.body.category;
     course.rating = req.body.rating;
-    course.document = req.body.documentUrl;
+    course.document = req.body.document;
     course.posterUrl = req.body.posterUrl;
     course.price = req.body.price;
 
@@ -93,9 +93,9 @@ router.route("/image/:refName").get((req, res, next) => {
   const baseUrl = process.env.DIR + "/image/";
   console.log(baseUrl);
   const fileName = baseUrl + req.params.refName;
-  res.sendFile(fileName, options, function (errror) {
-    if (errror) {
-      next(errror);
+  res.sendFile(fileName, options, function (error) {
+    if (error) {
+      next(error);
       res.status(400).json("Error: " + error);
     } else {
       console.log("Sent:", fileName);
