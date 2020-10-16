@@ -45,7 +45,7 @@ router.route("/update/:id").post((req, res) => {
     course.description = req.body.description;
     course.category = req.body.category;
     course.rating = req.body.rating;
-    course.document = req.body.documentUrl;
+    course.document = req.body.document;
     course.posterUrl = req.body.posterUrl;
     course.price = req.body.price;
 
