@@ -136,10 +136,7 @@ router.route("/document/:refName").get((req, res, next) => {
   const fileName = baseUrl + req.params.refName;
   res.sendFile(fileName, options, function (error) {
     if (error) {
-      next(error);
-      res.status(400).json("Error: " + error);
-    } else {
-      console.log("Sent:", fileName);
+      return res.status(400).json("Error: " + error);
     }
   });
 });
